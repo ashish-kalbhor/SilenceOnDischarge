@@ -8,17 +8,49 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-public class BatterySettings extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
+public class BatterySettings extends AppCompatActivity
+{
+    private List<String> listSpinner;
+    private int batteryThreshold;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battery_settings);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        final Spinner thresholdSpinner = (Spinner) findViewById(R.id.thresholdSpinner);
+        Button activateBtn = (Button) findViewById(R.id.activateBtn);
 
-        // TODO Spinner for Battery level threshold.
+        thresholdSpinner.setPrompt("Battery Level");
+        listSpinner = new ArrayList<String>();
+
+        for(int i = 1; i < 50; i++)
+        {
+            listSpinner.add("" + i);
+        }
+
+        ArrayAdapter<String> thresholdAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listSpinner);
+        thresholdAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        thresholdSpinner.setAdapter(thresholdAdapter);
+
+        activateBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                batteryThreshold = Integer.parseInt(thresholdSpinner.getSelectedItem().toString());
+                Toast.makeText(getApplicationContext(), batteryThreshold + "", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     @Override
